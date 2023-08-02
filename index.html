@@ -1,13 +1,33 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="src/starback.css">
     <title>Vite + Vue + TS</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div id="app"></div>
+<script type="module" src="/src/main.ts"></script>
+<script src="src/util/starback.js"></script>
+<script>
+    const starback = new Starback(canvas, {
+        width: canvas.parentElement.clientWidth,
+        height: canvas.parentElement.clientHeight,
+        speed: 5,
+        frequency: 5,
+        slope: {
+            x: 5,
+            y: 3
+        },
+        directionX: 1,
+        spread: .2,
+        randomOpacity: true,
+        backgroundColor: ["#0F2027", "#203A43", "#2C5364"]
+    })
+    starback.generateStar(30)
+</script>
+</body>
 </html>

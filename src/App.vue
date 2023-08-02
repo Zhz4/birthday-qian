@@ -1,30 +1,45 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from "vue";
+import Video from "./components/video/index.vue";
+import VueBaberrage from "./components/vueBaberrage/index.vue";
+// 播放器宽度
+const width = ref("700px");
+// 播放器高度
+const height = ref("400px");
+
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="container">
+      <div class="baberrage">
+        <VueBaberrage></VueBaberrage>
+      </div>
+      <div class="video" :style="{width:width,height:height}">
+        <Video :width="width" :height="height"></Video>
+      </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<style lang="scss" scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100vh; // 设置父容器高度为视口高度，确保视频位于屏幕底部
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.video {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 20px;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.baberrage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  z-index: 2;
 }
 </style>
