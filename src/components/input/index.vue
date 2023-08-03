@@ -1,29 +1,46 @@
 <script lang="ts" setup>
 import { ref, watch, h, getCurrentInstance } from "vue";
-import { Blessing } from "../../enmu/index";
+import Menu from "./menu";
 import { ElNotification } from "element-plus";
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
+const tanItem = ref();
+const promp = ref(Menu());
 
 const visible = ref(false);
 const value = ref("");
 watch(value, (newValue) => {
-  visible.value = newValue[0] === "/";
+  if (newValue[0] === "/") {
+    visible.value = true;
+    promp.value = Menu();
+    tanItem.value[0].parentNode.style.display = "block";
+  } else {
+    visible.value = false;
+  }
 });
-const promp = ref(
-  Object.values(Blessing).filter((value) => typeof value === "string")
-);
-console.log(promp.value);
 
 /**
  * 选中提示，然后给输入框复制
+ * 若是菜单，设跳转到对应的页面
+ * text 表示下一个是文本，这下菜单显示出来的就是文本内容
+ * null 表示没有下一个菜单了，选中则直接进入功能，若是文本的话，选中直接赋值到输入框
  */
-const tanClick = (item: any) => {
-  value.value = item;
-  visible.value = false;
+const fun = (item: any) => {
+  // 修改样式
+  if (item.name === "emoji😀") {
+    tanItem.value[0].parentNode.style.display = "flex";
+  }
+  if (item.type === "text") {
+    promp.value = item.value.map((item: any) => {
+      return { name: item, type: null };
+    });
+  } else if (item.type === null) {
+    value.value = item.name;
+  }
 };
 // 监听回车事件，按下回车提交弹幕
 const handleEnter = () => {
+  if (value.value === "") return;
   console.log(value.value);
   Bus.emit("danmu", value.value);
   visible.value = false;
@@ -34,7 +51,7 @@ const handleEnter = () => {
     message: h(
       "i",
       { style: "color: teal" },
-      "感谢你的祝福，祝你也有美好的一天"
+      "感谢你的祝福ya~，祝你有美好的一天"
     ),
   });
 };
@@ -67,8 +84,13 @@ const handleEnter = () => {
         </div>
       </template>
       <div>
-        <div class="tanItem" v-for="item in promp" @click="tanClick(item)">
-          {{ item }}
+        <div
+          ref="tanItem"
+          class="tanItem"
+          v-for="item in promp"
+          @click="fun(item)"
+        >
+          {{ item.name }}
         </div>
       </div>
     </el-popover>
