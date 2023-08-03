@@ -1,26 +1,25 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import Video from "./components/video/index.vue";
+// import { ref } from "vue";
+// import Video from "./components/video/index.vue";
 import Input from "./components/input/index.vue";
 import VueBaberrage from "./components/vueBaberrage/index.vue";
 // 播放器宽度
-const width = ref("700px");
+// const width = ref("700px");
 // 播放器高度
-const height = ref("400px");
-
+// const height = ref("400px");
 </script>
 
 <template>
   <div class="container">
-      <div class="baberrage">
-        <VueBaberrage></VueBaberrage>
-      </div>
-      <div class="input">
-        <Input></Input>
-      </div>
-<!--      <div class="video" :style="{width:width,height:height}">-->
-<!--        <Video :width="width" :height="height"></Video>-->
-<!--      </div>-->
+    <div class="baberrage">
+      <VueBaberrage></VueBaberrage>
+    </div>
+    <div class="input">
+      <Input></Input>
+    </div>
+    <!--      <div class="video" :style="{width:width,height:height}">-->
+    <!--        <Video :width="width" :height="height"></Video>-->
+    <!--      </div>-->
   </div>
 </template>
 
@@ -32,36 +31,35 @@ $focus: false;
   justify-content: center;
   align-items: flex-end;
   height: 100vh; // 设置父容器高度为视口高度，确保视频位于屏幕底部
-  .input{
-    $translateY:3px;
+  .input {
+    $translateY: 3px;
     margin-bottom: 30px;
     display: inline-block;
-    &:hover{
+    &:hover {
       //  向上过渡
       //transform: translateY(-$translateY);
       //transition: transform 0.2s ease-in-out;
-      $hover:true !global;
+      $hover: true !global;
     }
-    &:focus{
-      $focus:false !global;
+    &:focus {
+      $focus: false !global;
     }
     &:not(:hover) {
       /* 鼠标离开时向下过渡 */
       //transform: translateY($translateY);
       //transition: transform 0.2s ease-in-out;
-      $hover:false !global;
+      $hover: false !global;
     }
     &:not(:focus) {
-      $focus:true !global;
+      $focus: true !global;
     }
-    @if $hover or $focus{
+    @if $hover or $focus {
       transform: translateY(-$translateY);
       transition: transform 0.2s ease-in-out;
-    }@else{
+    } @else {
       transform: translateY($translateY);
       transition: transform 0.2s ease-in-out;
     }
-
   }
 }
 
