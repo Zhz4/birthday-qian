@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, watch, h, getCurrentInstance } from "vue";
-import Menu from "./menu";
-import { ElNotification } from "element-plus";
+import { Menu, emoji } from "./menu";
+import { ElNotification, ElMessage } from "element-plus";
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
 const tanItem = ref();
@@ -14,6 +14,7 @@ watch(value, (newValue) => {
     visible.value = true;
     promp.value = Menu();
     tanItem.value[0].parentNode.style.display = "block";
+    tanItem.value[0].parentNode.style.width = "450px";
   } else {
     visible.value = false;
   }
@@ -29,6 +30,7 @@ const fun = (item: any) => {
   // 修改样式
   if (item.name === "emoji😀") {
     tanItem.value[0].parentNode.style.display = "flex";
+    tanItem.value[0].parentNode.style.width = "470px";
   }
   if (item.type === "text") {
     promp.value = item.value.map((item: any) => {
@@ -36,12 +38,20 @@ const fun = (item: any) => {
     });
   } else if (item.type === null) {
     value.value = item.name;
+  } else if (item.type === "emojiNull") {
+    value.value += item.name;
   }
 };
 // 监听回车事件，按下回车提交弹幕
 const handleEnter = () => {
-  if (value.value === "") return;
-  console.log(value.value);
+  if (value.value.trim() === "") {
+    ElMessage({
+      message: "你还没有输入内容哦~",
+      type: "warning",
+    });
+    value.value = "";
+    return;
+  }
   Bus.emit("danmu", value.value);
   visible.value = false;
   value.value = "";
@@ -55,6 +65,17 @@ const handleEnter = () => {
     ),
   });
 };
+/**
+ * 打开emoji表情
+ */
+const handleEmoji = () => {
+  visible.value = !visible.value;
+  tanItem.value[0].parentNode.style.display = "flex";
+  tanItem.value[0].parentNode.style.width = "470px";
+  promp.value = emoji.map((item) => {
+    return { value: [item], type: "emojiNull", name: item };
+  });
+};
 </script>
 
 <template>
@@ -63,12 +84,33 @@ const handleEnter = () => {
       <template #reference>
         <div>
           <div class="group">
-            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-              <g>
-                <path
-                  d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"
-                ></path>
-              </g>
+            <svg
+              t="1691061585787"
+              class="icon"
+              viewBox="0 0 1024 1024"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              p-id="7014"
+              width="200"
+              height="200"
+              style="cursor: pointer"
+              @click="handleEmoji"
+            >
+              <path
+                d="M512 512m-512 0a512 512 0 1 0 1024 0 512 512 0 1 0-1024 0Z"
+                fill="#FBD971"
+                p-id="7015"
+              ></path>
+              <path
+                d="M512 877.714286c-161.328762 0-292.571429-131.242667-292.571429-292.571429a24.380952 24.380952 0 0 1 48.761905 0c0 134.436571 109.372952 243.809524 243.809524 243.809524s243.809524-109.372952 243.809524-243.809524a24.380952 24.380952 0 0 1 48.761905 0c0 161.328762-131.242667 292.571429-292.571429 292.571429z"
+                fill="#F0C419"
+                p-id="7016"
+              ></path>
+              <path
+                d="M390.095238 414.47619a24.380952 24.380952 0 0 1-24.380952-24.380952c0-40.326095-32.816762-73.142857-73.142857-73.142857s-73.142857 32.816762-73.142858 73.142857a24.380952 24.380952 0 0 1-48.761904 0c0-67.218286 54.686476-121.904762 121.904762-121.904762s121.904762 54.686476 121.904761 121.904762a24.380952 24.380952 0 0 1-24.380952 24.380952zM828.952381 414.47619a24.380952 24.380952 0 0 1-24.380952-24.380952c0-40.326095-32.816762-73.142857-73.142858-73.142857s-73.142857 32.816762-73.142857 73.142857a24.380952 24.380952 0 0 1-48.761904 0c0-67.218286 54.686476-121.904762 121.904761-121.904762s121.904762 54.686476 121.904762 121.904762a24.380952 24.380952 0 0 1-24.380952 24.380952z"
+                fill="#F29C1F"
+                p-id="7017"
+              ></path>
             </svg>
             <input
               placeholder="欢迎写你的生日祝福😉"
@@ -83,7 +125,7 @@ const handleEnter = () => {
           >
         </div>
       </template>
-      <div>
+      <div class="box">
         <div
           ref="tanItem"
           class="tanItem"
@@ -98,6 +140,10 @@ const handleEnter = () => {
 </template>
 
 <style lang="scss" scoped>
+.box {
+  // overflow: hidden;
+  flex-wrap: wrap;
+}
 .tanItem {
   padding: 0.5rem 1rem;
   cursor: pointer;
