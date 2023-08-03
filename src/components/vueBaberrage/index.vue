@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import vueDanmaku from 'vue3-danmaku'
 import {ref, watch} from 'vue'
-const danmus = ref(['danmu1', 'danmu2', 'danmu3', '...'])
+const danmus = ref(['小白：生日快乐快乐快乐快乐！！！！', 'danmu2', 'danmu3', '...'])
 // 计算屏幕宽度
 const width = ref(document.body.clientWidth)
 const height = ref(document.body.clientHeight)
@@ -17,16 +17,39 @@ watch(
 </script>
 <template>
   <div>
-    <vue-danmaku v-model:danmus="danmus" style="height:50vh; width:100vw" useSlot loop :channels="0">
+    <vue-danmaku v-model:danmus="danmus" style="height:50vh; width:100vw" useSlot loop :channels="0" :randomChannel="true">
       <template v-slot:dm="{ index, danmu }">
-        <span>{{ index }}{{ danmu}}</span>
+        <div class="danmuStyle">
+          <span class="Uimg">
+            <img src="../../assets/icon/birthday2.png" alt="birthday">
+          </span>
+          {{danmu}}
+        </div>
       </template>
     </vue-danmaku>
   </div>
 </template>
 
 <style lang="scss" scoped>
-span {
-  color: darkorange;
+.danmuStyle{
+  display: flex;
+  align-items: center;
+  background-color: rgba(34, 34, 34, 0.7);
+  padding: 5px;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 16px;
+  .Uimg{
+    $width: 55px;
+    $ratio: 2.1;
+    width: 64px;
+    height: calc(#{$width} / #{$ratio});
+    overflow: hidden;
+    img{
+      width: 100%;
+      height: 100%;
+    }
+  }
+  //font-weight: bold;
 }
 </style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Video from "./components/video/index.vue";
+import Input from "./components/input/index.vue";
 import VueBaberrage from "./components/vueBaberrage/index.vue";
 // 播放器宽度
 const width = ref("700px");
@@ -14,18 +15,54 @@ const height = ref("400px");
       <div class="baberrage">
         <VueBaberrage></VueBaberrage>
       </div>
-      <div class="video" :style="{width:width,height:height}">
-        <Video :width="width" :height="height"></Video>
+      <div class="input">
+        <Input></Input>
       </div>
+<!--      <div class="video" :style="{width:width,height:height}">-->
+<!--        <Video :width="width" :height="height"></Video>-->
+<!--      </div>-->
   </div>
 </template>
 
 <style lang="scss" scoped>
+$hover: false;
+$focus: false;
 .container {
   display: flex;
   justify-content: center;
   align-items: flex-end;
   height: 100vh; // 设置父容器高度为视口高度，确保视频位于屏幕底部
+  .input{
+    $translateY:3px;
+    margin-bottom: 30px;
+    display: inline-block;
+    &:hover{
+      //  向上过渡
+      //transform: translateY(-$translateY);
+      //transition: transform 0.2s ease-in-out;
+      $hover:true !global;
+    }
+    &:focus{
+      $focus:false !global;
+    }
+    &:not(:hover) {
+      /* 鼠标离开时向下过渡 */
+      //transform: translateY($translateY);
+      //transition: transform 0.2s ease-in-out;
+      $hover:false !global;
+    }
+    &:not(:focus) {
+      $focus:true !global;
+    }
+    @if $hover or $focus{
+      transform: translateY(-$translateY);
+      transition: transform 0.2s ease-in-out;
+    }@else{
+      transform: translateY($translateY);
+      transition: transform 0.2s ease-in-out;
+    }
+
+  }
 }
 
 .video {
