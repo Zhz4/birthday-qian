@@ -1,16 +1,21 @@
 <script lang="ts" setup>
-import { ref, watch, h, getCurrentInstance } from "vue";
+import { ref, watch, h, getCurrentInstance, reactive } from "vue";
 import { Menu, emoji } from "./menu";
 import { ElNotification, ElMessage } from "element-plus";
+import { Danmu } from "@/interface/index";
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
+// 获取dom元素
 const tanItem = ref();
 const promp = ref(Menu());
 
 const visible = ref(false);
-const value = ref("");
+const value = reactive<Danmu>({
+  content: "",
+  setup: "",
+});
 watch(value, (newValue) => {
-  if (newValue[0] === "/") {
+  if (newValue.content[0] === "/") {
     visible.value = true;
     promp.value = Menu();
     tanItem.value[0].parentNode.style.display = "block";
@@ -37,24 +42,29 @@ const fun = (item: any) => {
       return { name: item, type: null };
     });
   } else if (item.type === null) {
-    value.value = item.name;
+    value.content = item.name;
   } else if (item.type === "emojiNull") {
-    value.value += item.name;
+    value.content += item.name;
   }
 };
 // 监听回车事件，按下回车提交弹幕
 const handleEnter = () => {
-  if (value.value.trim() === "") {
+  if (value.content.trim() === "") {
     ElMessage({
       message: "你还没有输入内容哦~",
       type: "warning",
     });
-    value.value = "";
+    value.content = "";
     return;
   }
-  Bus.emit("danmu", value.value);
+  const newValue: Danmu = {
+    content: value.content,
+    setup: value.setup,
+  };
+  Bus.emit("danmu", newValue);
   visible.value = false;
-  value.value = "";
+  value.content = "";
+  value.setup = "";
   // 通知
   ElNotification({
     title: "发送成功",
@@ -116,7 +126,7 @@ const handleEmoji = () => {
               placeholder="欢迎写你的生日祝福😉"
               type="search"
               class="input"
-              v-model="value"
+              v-model="value.content"
               @keydown.enter="handleEnter"
             />
           </div>

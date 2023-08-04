@@ -1,11 +1,16 @@
 <script lang="ts" setup>
 import vueDanmaku from "vue3-danmaku";
-import { ref, watch, getCurrentInstance } from "vue";
-const danmus = ref([
-  "小白：生日快乐快乐快乐快乐！！！！",
-  "danmu2",
-  "danmu3",
-  "...",
+import { ref, watch, getCurrentInstance, reactive } from "vue";
+import { Danmu } from "@/interface/index";
+const danmus = reactive<Array<Danmu>>([
+  {
+    content: "这是一条弹幕",
+    setup: "123",
+  },
+  {
+    content: "这是一条弹幕2",
+    setup: "123",
+  },
 ]);
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
@@ -21,9 +26,9 @@ watch(
     console.log(width.value, height.value);
   }
 );
-Bus.on("danmu", (value: string) => {
-  console.log(value);
-  danmus.value.push(value);
+Bus.on("danmu", (value: Danmu) => {
+  danmus.push(value);
+  console.log(danmus);
 });
 </script>
 <template>
@@ -43,7 +48,7 @@ Bus.on("danmu", (value: string) => {
           <span class="Uimg">
             <img src="../../assets/icon/birthday2.png" alt="birthday" />
           </span>
-          {{ danmu }}
+          {{ danmu.content }}
         </div>
       </template>
     </vue-danmaku>
