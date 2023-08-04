@@ -10,27 +10,8 @@
 </head>
 
 <body>
-    <canvas id="canvas"></canvas>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
-    <script src="src/util/starback.js"></script>
-    <script>
-        const starback = new Starback(canvas, {
-            width: canvas.parentElement.clientWidth,
-            height: canvas.parentElement.clientHeight,
-            speed: 5,
-            frequency: 5,
-            slope: {
-                x: 5,
-                y: 3
-            },
-            directionX: 1,
-            spread: .2,
-            randomOpacity: true,
-            backgroundColor: ["#0F2027", "#203A43", "#2C5364"]
-        })
-        starback.generateStar(30)
-    </script>
 </body>
 
 </html>

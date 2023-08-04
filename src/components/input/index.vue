@@ -1,18 +1,17 @@
 <script lang="ts" setup>
-import { ref, h, getCurrentInstance, reactive,watch } from "vue";
+import { ref, h, getCurrentInstance, reactive, watch } from "vue";
 import { Menu, emoji } from "./menu";
 import { ElNotification, ElMessage } from "element-plus";
-import { Danmu } from "@/interface";
+import { Danmu } from "@/interface/index";
 import { addDanmu } from "@/api/danmu";
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
 // 获取dom元素
 const tanItem = ref();
 const promp = ref(Menu());
-
 const visible = ref(false);
 const Value = reactive({}) as Danmu;
-watch(Value, (newValue) => {
+watch(Value, (newValue: any) => {
   if (newValue.content.length > 0 && newValue.content[0] === "/") {
     visible.value = true;
     promp.value = Menu();
@@ -22,7 +21,6 @@ watch(Value, (newValue) => {
     visible.value = false;
   }
 });
-
 
 /**
  * 选中提示，然后给输入框复制

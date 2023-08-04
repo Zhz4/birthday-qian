@@ -6,7 +6,6 @@ import "vue3-video-play/dist/style.css"; // 引入css
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import mitt from "mitt";
-
 const app = createApp(App);
 
 // 将 $Bus 设置为全局属性
