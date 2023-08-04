@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { ref, watch, h, getCurrentInstance, reactive } from "vue";
+import { ref, h, getCurrentInstance, reactive,watch } from "vue";
 import { Menu, emoji } from "./menu";
 import { ElNotification, ElMessage } from "element-plus";
-import { Danmu } from "@/interface/index";
+import { Danmu } from "@/interface";
 import { addDanmu } from "@/api/danmu";
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
@@ -11,8 +11,8 @@ const tanItem = ref();
 const promp = ref(Menu());
 
 const visible = ref(false);
-const value: Danmu = reactive([]);
-watch(value, (newValue: any) => {
+const Value = reactive({}) as Danmu;
+watch(Value, (newValue) => {
   if (newValue.content.length > 0 && newValue.content[0] === "/") {
     visible.value = true;
     promp.value = Menu();
@@ -22,6 +22,7 @@ watch(value, (newValue: any) => {
     visible.value = false;
   }
 });
+
 
 /**
  * 选中提示，然后给输入框复制
@@ -40,24 +41,24 @@ const fun = (item: any) => {
       return { name: item, type: null };
     });
   } else if (item.type === null) {
-    value.content = item.name;
+    Value.content = item.name;
   } else if (item.type === "emojiNull") {
-    value.content += item.name;
+    Value.content += item.name;
   }
 };
 // 监听回车事件，按下回车提交弹幕
 const handleEnter = () => {
-  if (value.content.trim() === "") {
+  if (Value.content.trim() === "") {
     ElMessage({
       message: "你还没有输入内容哦~",
       type: "warning",
     });
-    value.content = "";
+    Value.content = "";
     return;
   }
   const newValue: Danmu = {
-    content: value.content,
-    setup: value.setup,
+    content: Value.content,
+    setup: "",
   };
   addDanmu(newValue).then((res: any) => {
     if (res.code === 200) {
@@ -72,8 +73,8 @@ const handleEnter = () => {
       });
       Bus.emit("danmu", newValue);
       visible.value = false;
-      value.content = "";
-      value.setup = "";
+      Value.content = "";
+      Value.setup = "";
     }
   });
 };
@@ -128,7 +129,7 @@ const handleEmoji = () => {
               placeholder="欢迎写你的生日祝福😉"
               type="search"
               class="input"
-              v-model="value.content"
+              v-model="Value.content"
               @keydown.enter="handleEnter"
             />
           </div>
