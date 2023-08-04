@@ -1,17 +1,10 @@
 <script lang="ts" setup>
 import vueDanmaku from "vue3-danmaku";
-import { ref, watch, getCurrentInstance, reactive } from "vue";
+import { ref, watch, getCurrentInstance, reactive, onMounted } from "vue";
 import { Danmu } from "@/interface/index";
-const danmus = reactive<Array<Danmu>>([
-  {
-    content: "这是一条弹幕",
-    setup: "123",
-  },
-  {
-    content: "这是一条弹幕2",
-    setup: "123",
-  },
-]);
+import { getDanmuList } from "@/api/danmu";
+const danmus = reactive<Array<Danmu>>([]);
+
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
 // 计算屏幕宽度
@@ -20,7 +13,7 @@ const height = ref(document.body.clientHeight);
 // 监听窗口大小变化
 watch(
   () => [window.innerWidth, window.innerHeight],
-  ([newWidth, newHeight]) => {
+  ([newWidth, newHeight]: any) => {
     width.value = newWidth;
     height.value = newHeight;
     console.log(width.value, height.value);
@@ -29,6 +22,14 @@ watch(
 Bus.on("danmu", (value: Danmu) => {
   danmus.push(value);
   console.log(danmus);
+});
+const getDanmu = () => {
+  getDanmuList().then((res: any) => {
+    danmus.push(...res.data);
+  });
+};
+onMounted(() => {
+  getDanmu();
 });
 </script>
 <template>

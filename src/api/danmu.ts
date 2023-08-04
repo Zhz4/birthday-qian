@@ -16,7 +16,7 @@ export function getDanmuList() {
  * @param data
  * @returns
  */
-export function addDanmu(data: object) {
+export function addDanmu(data: any) {
   return request({
     url: "/danmu/add",
     method: "post",

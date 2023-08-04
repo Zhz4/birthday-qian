@@ -3,6 +3,7 @@ import { ref, watch, h, getCurrentInstance, reactive } from "vue";
 import { Menu, emoji } from "./menu";
 import { ElNotification, ElMessage } from "element-plus";
 import { Danmu } from "@/interface/index";
+import { addDanmu } from "@/api/danmu";
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
 // 获取dom元素
@@ -10,12 +11,9 @@ const tanItem = ref();
 const promp = ref(Menu());
 
 const visible = ref(false);
-const value = reactive<Danmu>({
-  content: "",
-  setup: "",
-});
-watch(value, (newValue) => {
-  if (newValue.content[0] === "/") {
+const value: Danmu = reactive([]);
+watch(value, (newValue: any) => {
+  if (newValue.content.length > 0 && newValue.content[0] === "/") {
     visible.value = true;
     promp.value = Menu();
     tanItem.value[0].parentNode.style.display = "block";
@@ -61,18 +59,22 @@ const handleEnter = () => {
     content: value.content,
     setup: value.setup,
   };
-  Bus.emit("danmu", newValue);
-  visible.value = false;
-  value.content = "";
-  value.setup = "";
-  // 通知
-  ElNotification({
-    title: "发送成功",
-    message: h(
-      "i",
-      { style: "color: teal" },
-      "感谢你的祝福ya~，祝你有美好的一天"
-    ),
+  addDanmu(newValue).then((res: any) => {
+    if (res.code === 200) {
+      // 通知
+      ElNotification({
+        title: "发送成功",
+        message: h(
+          "i",
+          { style: "color: teal" },
+          "感谢你的祝福ya~，祝你有美好的一天"
+        ),
+      });
+      Bus.emit("danmu", newValue);
+      visible.value = false;
+      value.content = "";
+      value.setup = "";
+    }
   });
 };
 /**

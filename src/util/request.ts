@@ -1,13 +1,18 @@
 import axios from "axios";
 import { ElMessage } from "element-plus";
+// 设置默认的请求头
+axios.defaults.headers.post["Content-Type"] =
+  "application/x-www-form-urlencoded";
 const service = axios.create({
-  baseURL: "http://127.0.0.1:8000", // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
+  baseURL: "http://47.120.4.169:7070", // url = base url + request url
   timeout: 5000, // request timeout
 });
+
 // 响应拦截
 service.interceptors.response.use(
   (response: any) => {
+    console.log(response);
+
     const res = response.data;
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 200) {
@@ -21,7 +26,7 @@ service.interceptors.response.use(
       return res;
     }
   },
-  (error) => {
+  (error: any) => {
     console.log("err" + error); // for debug
     ElMessage({
       message: error.msg,
