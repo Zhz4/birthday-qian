@@ -60,13 +60,14 @@ onMounted(() => {
 .danmuStyle {
   display: flex;
   align-items: center;
-  background-color: rgba(34, 34, 34, 0.7);
-  padding: 5px;
+  background-color: rgba(144, 86, 158, 0.7);
+  border: 2px solid #cccccc;
+  padding: 5px 10px;
   border-radius: 30px;
   color: #fff;
   font-size: 16px;
   .Uimg {
-    $width: 55px;
+    $width: 55px; // 只用修改这
     $ratio: 2.1;
     width: 64px;
     height: calc(#{$width} / #{$ratio});

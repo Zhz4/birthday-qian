@@ -4,6 +4,8 @@ import { Menu, emoji } from "./menu";
 import { ElNotification, ElMessage } from "element-plus";
 import { Danmu } from "@/interface/index";
 import { addDanmu } from "@/api/danmu";
+import { debounce } from "lodash"; // 防抖的库
+// import debounce from "@/util/debounce";
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
 // 获取dom元素
@@ -44,38 +46,44 @@ const fun = (item: any) => {
     Value.content += item.name;
   }
 };
-// 监听回车事件，按下回车提交弹幕
-const handleEnter = () => {
-  if (Value.content.trim() === "") {
-    ElMessage({
-      message: "你还没有输入内容哦~",
-      type: "warning",
-    });
-    Value.content = "";
-    return;
-  }
-  const newValue: Danmu = {
-    content: Value.content,
-    setup: "",
-  };
-  addDanmu(newValue).then((res: any) => {
-    if (res.code === 200) {
-      // 通知
-      ElNotification({
-        title: "发送成功",
-        message: h(
-          "i",
-          { style: "color: teal" },
-          "感谢你的祝福ya~，祝你有美好的一天"
-        ),
+// 监听回车事件，按下回车提交弹幕,并加入了防抖
+const debouncetime = 2000; // 防抖时间
+const handleEnter = debounce(
+  () => {
+    if (Value.content.trim() === "") {
+      ElMessage({
+        message: "你还没有输入内容哦~",
+        type: "warning",
       });
-      Bus.emit("danmu", newValue);
-      visible.value = false;
       Value.content = "";
-      Value.setup = "";
+      return;
     }
-  });
-};
+    const newValue: Danmu = {
+      content: Value.content,
+      setup: "",
+    };
+    addDanmu(newValue).then((res: any) => {
+      if (res.code === 200) {
+        // 通知
+        ElNotification({
+          title: "发送成功",
+          message: h(
+            "i",
+            { style: "color: teal" },
+            "感谢你的祝福ya~，祝你有美好的一天"
+          ),
+        });
+        Bus.emit("danmu", newValue);
+        visible.value = false;
+        Value.content = "";
+        Value.setup = "";
+      }
+    });
+  },
+  debouncetime,
+  { leading: true, trailing: false }
+);
+
 /**
  * 打开emoji表情
  */
@@ -167,7 +175,7 @@ const handleEmoji = () => {
   line-height: 28px;
   align-items: center;
   position: relative;
-  width: 490px;
+  width: 480px;
 }
 
 .input {
@@ -178,9 +186,10 @@ const handleEmoji = () => {
   padding-left: 2.5rem;
   border: 2px solid transparent;
   border-radius: 8px;
+  // font-weight: bold;
   outline: none;
   background-color: #f3f3f4;
-  color: #0d0c22;
+  color: #9e5b9e;
   transition: 0.3s ease;
 }
 
