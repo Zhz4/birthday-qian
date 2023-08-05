@@ -1,11 +1,11 @@
 <script setup lang="ts">
 // import { ref } from "vue";
 // import Video from "./components/video/index.vue";
-import Test from "./components/test/index.vue";
-import Test2 from "./components/test/index2.vue";
-import Test3 from "./components/test/index3.vue";
-import Input from "./components/input/index.vue";
-import VueBaberrage from "./components/vueBaberrage/index.vue";
+// import Test from "./components/background/index.vue";
+import background2 from "./components/background/index2.vue";
+// import Test3 from "./components/background/index3.vue";
+// import Input from "./components/input/index.vue";
+// import VueBaberrage from "./components/vueBaberrage/index.vue";
 // 播放器宽度
 // const width = ref("700px");
 // 播放器高度
@@ -15,7 +15,7 @@ import VueBaberrage from "./components/vueBaberrage/index.vue";
 <template>
   <div class="container">
     <!-- <Test></Test> -->
-    <Test2></Test2>
+    <background2></background2>
     <!-- <Test3></Test3> -->
     <!-- <div class="baberrage">
       <VueBaberrage></VueBaberrage>
