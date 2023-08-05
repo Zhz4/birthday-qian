@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, h, getCurrentInstance, reactive, watch } from "vue";
+import { ref, h, getCurrentInstance, reactive, watch, onMounted } from "vue";
 import { Menu, emoji } from "./menu";
 import { ElNotification, ElMessage } from "element-plus";
 import { Danmu } from "@/interface/index";
@@ -7,17 +7,41 @@ import { addDanmu } from "@/api/danmu";
 import throttle from "@/util/throttle";
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
+const screenWidth = ref(window.innerWidth); // 创建响应式引用
+const popover_width = ref(480);
 // 获取dom元素
 const tanItem = ref();
 const promp = ref(Menu());
 const visible = ref(false);
-const Value = reactive({}) as Danmu;
+const Value = reactive({
+  content: "",
+  setup: "",
+}) as Danmu;
+
+onMounted(() => {
+  if (screenWidth.value < 480) {
+    popover_width.value = 300;
+  }
+  if (screenWidth.value < 320) {
+    popover_width.value = 250;
+  }
+});
+
+watch(
+  () => [window.innerWidth, window.innerHeight],
+  ([newWidth, newHeight]: any) => {
+    screenWidth.value = newWidth;
+    if (screenWidth.value < 480) {
+      popover_width.value = 370;
+    }
+  }
+);
 watch(Value, (newValue: any) => {
   if (newValue.content.length > 0 && newValue.content[0] === "/") {
     visible.value = true;
     promp.value = Menu();
     tanItem.value[0].parentNode.style.display = "block";
-    tanItem.value[0].parentNode.style.width = "450px";
+    // tanItem.value[0].parentNode.style.width = "450px";
   } else {
     visible.value = false;
   }
@@ -33,7 +57,7 @@ const fun = (item: any) => {
   // 修改样式
   if (item.name === "emoji😀") {
     tanItem.value[0].parentNode.style.display = "flex";
-    tanItem.value[0].parentNode.style.width = "470px";
+    // tanItem.value[0].parentNode.style.width = "470px";
   }
   if (item.type === "text") {
     promp.value = item.value.map((item: any) => {
@@ -46,7 +70,7 @@ const fun = (item: any) => {
   }
 };
 // 监听回车事件，按下回车提交弹幕,并加入了防抖
-const debouncetime = 5000; // 防抖时间
+const debouncetime = 10; // 防抖时间
 const handleEnter = throttle(() => {
   if (Value.content.trim() === "") {
     ElMessage({
@@ -85,7 +109,7 @@ const handleEnter = throttle(() => {
 const handleEmoji = () => {
   visible.value = !visible.value;
   tanItem.value[0].parentNode.style.display = "flex";
-  tanItem.value[0].parentNode.style.width = "470px";
+  // tanItem.value[0].parentNode.style.width = "470px";
   promp.value = emoji.map((item) => {
     return { value: [item], type: "emojiNull", name: item };
   });
@@ -94,7 +118,12 @@ const handleEmoji = () => {
 
 <template>
   <div>
-    <el-popover placement="bottom" :visible="visible" :width="480">
+    <el-popover
+      popper-class="popover"
+      placement="bottom"
+      :visible="visible"
+      :width="popover_width"
+    >
       <template #reference>
         <div>
           <div class="group">
@@ -131,7 +160,7 @@ const handleEmoji = () => {
               type="search"
               class="input"
               v-model="Value.content"
-              @keydown.enter="handleEnter"
+              @keyup.enter="handleEnter"
             />
           </div>
           <el-tag class="ml-2" type="warning"
@@ -154,57 +183,6 @@ const handleEmoji = () => {
 </template>
 
 <style lang="scss" scoped>
-.box {
-  // overflow: hidden;
-  flex-wrap: wrap;
-}
-.tanItem {
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  &:hover {
-    background-color: #f3f3f4;
-  }
-}
-.group {
-  display: flex;
-  line-height: 28px;
-  align-items: center;
-  position: relative;
-  width: 480px;
-}
-
-.input {
-  width: 100%;
-  height: 40px;
-  line-height: 28px;
-  padding: 0 1rem;
-  padding-left: 2.5rem;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  // font-weight: bold;
-  outline: none;
-  background-color: #f3f3f4;
-  color: #9e5b9e;
-  transition: 0.3s ease;
-}
-
-.input::placeholder {
-  color: #9e9ea7;
-}
-
-.input:focus,
-input:hover {
-  outline: none;
-  border-color: rgba(234, 76, 137, 0.4);
-  background-color: #fff;
-  box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
-}
-
-.icon {
-  position: absolute;
-  left: 1rem;
-  fill: #9e9ea7;
-  width: 1rem;
-  height: 1rem;
-}
+@import "./scss/index.scss";
+@import "./scss/media.scss";
 </style>
