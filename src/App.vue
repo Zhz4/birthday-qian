@@ -1,11 +1,12 @@
 <script setup lang="ts">
-// import { ref } from "vue";
 // import Video from "./components/video/index.vue";
 // import Test from "./components/background/index.vue";
 import background2 from "./components/background/index2.vue";
 // import Test3 from "./components/background/index3.vue";
 // import Input from "./components/input/index.vue";
 // import VueBaberrage from "./components/vueBaberrage/index.vue";
+// const fullscreenLoading = ref(true);
+
 // 播放器宽度
 // const width = ref("700px");
 // 播放器高度

@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+    <FlipCountdown></FlipCountdown>
     <div ref="vantaRef" style="width: 100%; height: 100vh"></div>
     <div class="input">
       <Input></Input>
@@ -16,6 +17,8 @@ import * as THREE from "three";
 import FOG from "vanta/src/vanta.fog";
 import Input from "@/components/input/index.vue";
 import VueBaberrage from "@/components/vueBaberrage/index.vue";
+import FlipCountdown from "@/components/countdown/index.vue";
+
 export default {
   components: {
     Input,
