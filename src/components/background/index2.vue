@@ -1,12 +1,15 @@
 <template>
   <div class="box">
-    <FlipCountdown></FlipCountdown>
+    <!-- <FlipCountdown></FlipCountdown> -->
     <div ref="vantaRef" style="width: 100%; height: 100vh"></div>
+    <div class="baberrage">
+      <VueBaberrage></VueBaberrage>
+    </div>
     <div class="input">
       <Input></Input>
     </div>
-    <div class="baberrage">
-      <VueBaberrage></VueBaberrage>
+    <div class="music">
+      <Music></Music>
     </div>
   </div>
 </template>
@@ -17,12 +20,13 @@ import * as THREE from "three";
 import FOG from "vanta/src/vanta.fog";
 import Input from "@/components/input/index.vue";
 import VueBaberrage from "@/components/vueBaberrage/index.vue";
-import FlipCountdown from "@/components/countdown/index.vue";
-
+// import FlipCountdown from "@/components/countdown/index.vue";
+import Music from "@/components/music/index.vue";
 export default {
   components: {
     Input,
     VueBaberrage,
+    Music,
   },
   setup() {
     const vantaRef = ref(null);
@@ -74,6 +78,12 @@ export default {
     left: 50%;
     transform: translateX(-50%);
     color: #fff;
+  }
+  .music {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 .baberrage {

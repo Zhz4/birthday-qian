@@ -4,7 +4,8 @@ import { ElMessage } from "element-plus";
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded";
 const service = axios.create({
-  baseURL: "http://47.120.4.169:7070", // url = base url + request url
+  // baseURL: "http://localhost:7070", // 本地
+  baseURL: "http://47.120.4.169:7070", // 服务器
   timeout: 5000, // request timeout
 });
 

@@ -59,6 +59,14 @@ const fun = (item: any) => {
     tanItem.value[0].parentNode.style.display = "flex";
     // tanItem.value[0].parentNode.style.width = "470px";
   }
+  // 此处插入视频功能
+  if (item.name === "视频") {
+    ElMessage({
+      message: "视频功能暂未开放哦~",
+      type: "warning",
+    });
+  }
+  // 这部分不修改
   if (item.type === "text") {
     promp.value = item.value.map((item: any) => {
       return { name: item, type: null };
@@ -163,7 +171,7 @@ const handleEmoji = () => {
               @keyup.enter="handleEnter"
             />
           </div>
-          <el-tag class="ml-2" type="warning"
+          <el-tag class="ml-2" type="warning" style="margin-top: 5px"
             >小tip：输入 '/' 可快捷输入</el-tag
           >
         </div>

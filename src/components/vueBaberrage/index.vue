@@ -3,6 +3,7 @@ import vueDanmaku from "vue3-danmaku";
 import { ref, watch, getCurrentInstance, reactive, onMounted } from "vue";
 import { Danmu } from "@/interface/index";
 import { getDanmuList } from "@/api/danmu";
+import { getDanmuCount } from "@/api/danmu";
 const danmus = reactive<Array<Danmu>>([]);
 
 // 获取到 全局事件总线
@@ -23,12 +24,20 @@ Bus.on("danmu", (value: Danmu) => {
   danmus.push(value);
   console.log(danmus);
 });
+// 获取弹幕列表
 const getDanmu = () => {
   getDanmuList().then((res: any) => {
     danmus.push(...res.data);
   });
 };
+// 获取弹幕个数
+const getdanmuCount = () => {
+  getDanmuCount().then((res: any) => {
+    danmus.unshift(res.data);
+  });
+};
 onMounted(() => {
+  getdanmuCount();
   getDanmu();
 });
 </script>

@@ -23,3 +23,14 @@ export function addDanmu(data: any) {
     data,
   });
 }
+
+/**
+ * 获取弹幕数量
+ * @returns 弹幕数
+ */
+export function getDanmuCount() {
+  return request({
+    url: "/danmu/getDanmuCount",
+    method: "get",
+  });
+}
