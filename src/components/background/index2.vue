@@ -1,16 +1,7 @@
 <template>
   <div class="box">
-    <!-- <FlipCountdown></FlipCountdown> -->
     <div ref="vantaRef" style="width: 100%; height: 100vh"></div>
-    <div class="baberrage">
-      <VueBaberrage></VueBaberrage>
-    </div>
-    <div class="input">
-      <Input></Input>
-    </div>
-    <div class="music">
-      <Music></Music>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -18,16 +9,7 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import * as THREE from "three";
 import FOG from "vanta/src/vanta.fog";
-import Input from "@/components/input/index.vue";
-import VueBaberrage from "@/components/vueBaberrage/index.vue";
-// import FlipCountdown from "@/components/countdown/index.vue";
-import Music from "@/components/music/index.vue";
 export default {
-  components: {
-    Input,
-    VueBaberrage,
-    Music,
-  },
   setup() {
     const vantaRef = ref(null);
     let vantaEffect = null;
@@ -72,26 +54,5 @@ export default {
 <style lang="scss" scoped>
 .box {
   position: relative;
-  .input {
-    position: absolute;
-    bottom: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #fff;
-  }
-  .music {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-}
-.baberrage {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  z-index: 2;
 }
 </style>

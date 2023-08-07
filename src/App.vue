@@ -1,38 +1,17 @@
 <script setup lang="ts">
-// import Video from "./components/video/index.vue";
-// import Test from "./components/background/index.vue";
-import background2 from "./components/background/index2.vue";
-// import Test3 from "./components/background/index3.vue";
-// import Input from "./components/input/index.vue";
-// import VueBaberrage from "./components/vueBaberrage/index.vue";
-// const fullscreenLoading = ref(true);
-
-// 播放器宽度
-// const width = ref("700px");
-// 播放器高度
-// const height = ref("400px");
+// import Home from "@/components/home/index.vue";
 </script>
 
 <template>
   <div class="container">
-    <!-- <Test></Test> -->
-    <background2></background2>
-    <!-- <Test3></Test3> -->
-    <!-- <div class="baberrage">
-      <VueBaberrage></VueBaberrage>
-    </div>
-    <div class="input">
-      <Input></Input>
-    </div> -->
-    <!--      <div class="video" :style="{width:width,height:height}">-->
-    <!--        <Video :width="width" :height="height"></Video>-->
-    <!--      </div>-->
+    <router-view></router-view>
+    <!-- <Home></Home> -->
   </div>
 </template>
 
 <style lang="scss" scoped>
-$hover: false;
-$focus: false;
+// $hover: false;
+// $focus: false;
 // .container {
 //   display: flex;
 //   justify-content: center;
@@ -70,18 +49,18 @@ $focus: false;
 //   }
 // }
 
-.video {
-  position: relative;
-  z-index: 1;
-  margin-bottom: 20px;
-}
+// .video {
+//   position: relative;
+//   z-index: 1;
+//   margin-bottom: 20px;
+// }
 
-.baberrage {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  z-index: 2;
-}
+// .baberrage {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 50%;
+//   z-index: 2;
+// }
 </style>

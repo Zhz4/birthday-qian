@@ -19,6 +19,7 @@
     "vanta": "^0.5.24",
     "vue": "^3.3.4",
     "vue-baberrage": "^3.2.4",
+    "vue-router": "^4.2.4",
     "vue2-flip-countdown": "^1.0.0",
     "vue3-aplayer": "^1.7.3",
     "vue3-danmaku": "^1.5.1",

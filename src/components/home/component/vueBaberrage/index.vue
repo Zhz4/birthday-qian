@@ -56,7 +56,7 @@ onMounted(() => {
       <template v-slot:dm="{ danmu }">
         <div class="danmuStyle">
           <span class="Uimg">
-            <img src="../../assets/icon/birthday2.png" alt="birthday" />
+            <img src="@/assets/icon/birthday2.png" alt="birthday" />
           </span>
           {{ danmu.content }}
         </div>
