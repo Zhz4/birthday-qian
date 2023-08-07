@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import { ref, h, getCurrentInstance, reactive, watch, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
 import { Menu, emoji } from "./menu";
 import { ElNotification, ElMessage } from "element-plus";
 import { Danmu } from "@/interface/index";
 import { addDanmu } from "@/api/danmu";
 import throttle from "@/util/throttle";
+const router = useRouter(); // 路由
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
 const screenWidth = ref(window.innerWidth); // 创建响应式引用
@@ -59,12 +62,18 @@ const fun = (item: any) => {
     tanItem.value[0].parentNode.style.display = "flex";
     // tanItem.value[0].parentNode.style.width = "470px";
   }
+  // 此处插入图片功能
+  if (item.name === "图片") {
+    router.push({ path: "/photo" });
+    return;
+  }
   // 此处插入视频功能
   if (item.name === "视频") {
     ElMessage({
       message: "视频功能暂未开放哦~",
       type: "warning",
     });
+    return;
   }
   // 这部分不修改
   if (item.type === "text") {

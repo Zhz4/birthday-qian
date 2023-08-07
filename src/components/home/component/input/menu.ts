@@ -51,6 +51,7 @@ const obj = {
   生日祝福: Blessing,
   "emoji😀": emoji,
   视频: "video",
+  图片: "photo",
 };
 
 export const Menu = () => {
