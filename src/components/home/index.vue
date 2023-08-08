@@ -5,7 +5,7 @@ import DrawRight from "./component/draw/index.vue";
 import { ref, onMounted } from "vue";
 const drawOpenOrNot = ref<boolean>(false);
 const screenWidth = ref(window.innerWidth); // 创建响应式引用
-const draw_size = ref("20%");
+const draw_size = ref("350");
 const drawOpenOrNotFun = () => {
   drawOpenOrNot.value = !drawOpenOrNot.value;
 };
@@ -39,16 +39,20 @@ onMounted(() => {
     direction="ltr"
     :size="draw_size"
   >
-    <template #header="{ close, titleId, titleClass }">
+    <template #header="{ titleId, titleClass }">
       <div>
-        <h4 :id="titleId" :class="titleClass">This is a custom header!</h4>
-        <el-button type="danger" @click="close">
-          <el-icon class="el-icon--left"><CircleCloseFilled /></el-icon>
-          Close
-        </el-button>
+        <h4 :id="titleId" :class="titleClass">菜单</h4>
       </div>
     </template>
     <DrawRight></DrawRight>
+    <template #footer>
+      <div>
+        <el-button type="danger" @click="drawOpenOrNot = false">
+          <el-icon class="el-icon--left"><CircleCloseFilled /></el-icon>
+          关闭
+        </el-button>
+      </div>
+    </template>
   </el-drawer>
 </template>
 
