@@ -25,6 +25,10 @@ const routes = [
     component: () => import("@/components/wish/index.vue"),
   },
   {
+    path: "/video",
+    component: () => import("@/components/video/index.vue"),
+  },
+  {
     path: "/404",
     name: "NotFound",
     component: () => import("@/components/404/index.vue"),
