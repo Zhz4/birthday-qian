@@ -1,68 +1,35 @@
 <template>
   <div>
     <h1>ScrollReveal 演示demo</h1>
-    <WaterFall gap="10px" width="250px" :delay="true" :data="items">
+    <WaterFall gap="10px" :width="photowidth" :delay="true" :data="items">
       <template #default="item">
-        <div class="item" :style="{ backgroundColor: item.bgColor }">
-          {{ item.number }}
+        <div class="item">
+          <img :src="item.path" alt="" />
         </div>
       </template>
     </WaterFall>
-
-    <!-- <div
-      class="item"
-      v-for="item in items"
-      :key="item"
-      :style="{ backgroundColor: item.bgColor }"
-    >
-      {{ item.id }}
-    </div> -->
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import ScrollReveal from "scrollReveal";
 import WaterFall from "kuan-vue-waterfall";
-import { RandomColorGenerator } from "random-color-creator";
+import { getAllImage } from "@/api/image";
 
-const items = ref<any>([]);
-const generateRandomStringLength = (minLength: number, maxLength: number) => {
-  const length =
-    Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  let result = "";
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charactersLength);
-    result += characters.charAt(randomIndex);
-  }
-
-  return result;
-};
-for (let i = 1; i <= 100; i++) {
-  items.value.push({
-    id: i,
-    number: generateRandomStringLength(1, 1000),
-    bgColor: RandomColorGenerator({ format: "HEX" }),
+const items = ref([]);
+const photowidth = ref("250px");
+const screenWidth = ref(window.innerWidth); // 创建响应式引用
+getAllImage().then((res: any) => {
+  res.data.map((item: any) => {
+    items.value.push({
+      path: "http://47.120.4.169:7070" + item.path,
+    });
   });
-}
-
+});
 onMounted(() => {
-  ScrollReveal().reveal(".dd", {
-    reset: true,
-    distance: "50px",
-    origin: "left",
-    interval: 80,
-    opacity: 0.1,
-    rotate: {
-      x: 20,
-      z: 20,
-    },
-    scale: 0.6,
-  });
+  if (screenWidth.value < 480) {
+    photowidth.value = "150px";
+  }
 });
 </script>
 
@@ -80,6 +47,9 @@ onMounted(() => {
   font-size: 28px;
   flex: 1 1 0;
   color: #fff;
+}
+img {
+  width: 100%;
 }
 .card {
   width: 100px;

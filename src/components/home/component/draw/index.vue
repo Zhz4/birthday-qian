@@ -21,6 +21,7 @@ const menuList = ref([
 ]);
 const routerRun = (path: string) => {
   router.push(path);
+  // window.open(path, "_blank");
 };
 </script>
 <template>
