@@ -2,18 +2,12 @@
 import VueBaberrage from "./component/vueBaberrage/index.vue";
 import Input from "./component/input/index.vue";
 import DrawRight from "./component/draw/index.vue";
-import { ref, onMounted } from "vue";
-const drawOpenOrNot = ref<boolean>(false);
-const screenWidth = ref(window.innerWidth); // 创建响应式引用
-const draw_size = ref("350");
+import { ref, provide } from "vue";
+const drawOpenOrNot = ref(false);
+provide("drawOpenOrNot", drawOpenOrNot);
 const drawOpenOrNotFun = () => {
   drawOpenOrNot.value = !drawOpenOrNot.value;
 };
-onMounted(() => {
-  if (screenWidth.value <= 480) {
-    draw_size.value = "100%";
-  }
-});
 </script>
 
 <template>
@@ -33,27 +27,7 @@ onMounted(() => {
       />
     </svg>
   </div>
-  <el-drawer
-    v-model="drawOpenOrNot"
-    :show-close="false"
-    direction="ltr"
-    :size="draw_size"
-  >
-    <template #header="{ titleId, titleClass }">
-      <div>
-        <h4 :id="titleId" :class="titleClass">菜单</h4>
-      </div>
-    </template>
-    <DrawRight></DrawRight>
-    <template #footer>
-      <div>
-        <el-button type="danger" @click="drawOpenOrNot = false">
-          <el-icon class="el-icon--left"><CircleCloseFilled /></el-icon>
-          关闭
-        </el-button>
-      </div>
-    </template>
-  </el-drawer>
+  <DrawRight></DrawRight>
 </template>
 
 <style lang="scss" scoped>

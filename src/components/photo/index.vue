@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <h1>ScrollReveal 演示demo</h1>
+  <div id="photo-background">
+    <h1 id="title">照片墙</h1>
     <WaterFall gap="10px" :width="photowidth" :delay="true" :data="items">
       <template #default="item">
-        <div class="item">
-          <img :src="item.path" alt="" />
+        <div class="photo-item">
+          <el-image :src="item.path" lazy />
+          <!-- <img :src="item.path" alt="" /> -->
         </div>
       </template>
     </WaterFall>
@@ -14,18 +15,39 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import WaterFall from "kuan-vue-waterfall";
-import { getAllImage } from "@/api/image";
+// import { getAllImage } from "@/api/image";
 
-const items = ref([]);
+const urls = [
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2810%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2811%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2812%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2813%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2814%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2815%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2816%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2817%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2818%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2819%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2820%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2821%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2822%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%284%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%285%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%286%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%287%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%288%29.jpeg",
+  "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%289%29.jpeg",
+];
+const items = urls.map((url) => ({ path: url }));
 const photowidth = ref("250px");
 const screenWidth = ref(window.innerWidth); // 创建响应式引用
-getAllImage().then((res: any) => {
-  res.data.map((item: any) => {
-    items.value.push({
-      path: "http://47.120.4.169:7070" + item.path,
-    });
-  });
-});
+// getAllImage().then((res: any) => {
+//   res.data.map((item: any) => {
+//     items.value.push({
+//       path: "http://47.120.4.169:7070" + item.path,
+//     });
+//   });
+// });
 onMounted(() => {
   if (screenWidth.value < 480) {
     photowidth.value = "150px";
@@ -34,7 +56,17 @@ onMounted(() => {
 </script>
 
 <style>
-.item {
+#photo-background {
+  background: linear-gradient(to bottom, #debee7, #dba1b7);
+}
+#title {
+  text-align: center;
+  font-size: 50px;
+  color: #fff;
+  margin: 0;
+  padding: 20px;
+}
+.photo-item {
   width: 100%;
   word-wrap: break-word;
   /* height: 7%; */
@@ -42,10 +74,12 @@ onMounted(() => {
   line-height: 72px;
   text-align: center;
   /* background-color: lightgreen; */
-  border-radius: 8px;
+  border-radius: 10px;
   margin: 10px auto;
+  border: 3px solid #fff;
   font-size: 28px;
   flex: 1 1 0;
+  overflow: hidden;
   color: #fff;
 }
 img {
