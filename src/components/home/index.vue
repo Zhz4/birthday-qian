@@ -2,12 +2,15 @@
 import VueBaberrage from "./component/vueBaberrage/index.vue";
 import Input from "./component/input/index.vue";
 import DrawRight from "./component/draw/index.vue";
-import { ref, provide } from "vue";
+import { ref, provide, onMounted } from "vue";
 const drawOpenOrNot = ref(false);
 provide("drawOpenOrNot", drawOpenOrNot);
 const drawOpenOrNotFun = () => {
   drawOpenOrNot.value = !drawOpenOrNot.value;
 };
+// onMounted(() => {
+//   location.reload(); // 刷新页面
+// });
 </script>
 
 <template>
