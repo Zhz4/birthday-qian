@@ -7,9 +7,15 @@ import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import mitt from "mitt";
 import router from "@/router/index.ts";
+import { VueMasonryPlugin } from "vue-masonry";
 const app = createApp(App);
 
 // 将 $Bus 设置为全局属性
 app.config.globalProperties.Bus = mitt();
 
-app.use(vue3videoPlay).use(ElementPlus).use(router).mount("#app");
+app
+  .use(vue3videoPlay)
+  .use(ElementPlus)
+  .use(VueMasonryPlugin)
+  .use(router)
+  .mount("#app");

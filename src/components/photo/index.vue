@@ -1,22 +1,45 @@
 <template>
   <div id="photo-background">
     <h1 id="title">照片墙</h1>
-    <WaterFall gap="10px" :width="photowidth" :delay="true" :data="items">
+    <div
+      v-masonry="containerId"
+      gutter="10"
+      transition-duration="0.3s"
+      item-selector=".photo-item"
+      class="wrapper"
+    >
+      <div
+        v-for="(item, index) in items"
+        v-masonry-tile
+        :key="index"
+        class="photo-item"
+        :style="{ width: photowidth }"
+      >
+        <el-image :src="item.path" lazy />
+      </div>
+    </div>
+    <!-- <WaterFall
+      class="wall"
+      gap="10px"
+      :width="photowidth"
+      :delay="true"
+      :data="items"
+    >
       <template #default="item">
         <div class="photo-item">
           <el-image :src="item.path" lazy />
-          <!-- <img :src="item.path" alt="" /> -->
         </div>
       </template>
-    </WaterFall>
+    </WaterFall> -->
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import WaterFall from "kuan-vue-waterfall";
+// import waterfall from "vue-waterfall2";
 // import { getAllImage } from "@/api/image";
-
+const containerId = ref(42);
 const urls = [
   "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2810%29.jpeg",
   "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2811%29.jpeg",
@@ -40,7 +63,7 @@ const urls = [
 ];
 const items = urls.map((url) => ({ path: url }));
 const photowidth = ref("250px");
-const screenWidth = ref(window.innerWidth); // 创建响应式引用
+// const screenWidth = ref(window.innerWidth); // 创建响应式引用
 // getAllImage().then((res: any) => {
 //   res.data.map((item: any) => {
 //     items.value.push({
@@ -48,11 +71,6 @@ const screenWidth = ref(window.innerWidth); // 创建响应式引用
 //     });
 //   });
 // });
-onMounted(() => {
-  if (screenWidth.value < 480) {
-    photowidth.value = "150px";
-  }
-});
 </script>
 
 <style>
@@ -85,7 +103,8 @@ onMounted(() => {
 img {
   width: 100%;
 }
-.card {
-  width: 100px;
+.wrapper {
+  width: 90%;
+  margin: 0 auto;
 }
 </style>
