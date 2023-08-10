@@ -10,6 +10,7 @@ function throttle<T extends (...args: any[]) => void>(
   fn: T,
   time: number
 ): (...args: Parameters<T>) => void {
+  console.log("节流函数");
   let flag = true;
   let timer: NodeJS.Timeout | null = null;
 

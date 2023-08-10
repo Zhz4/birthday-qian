@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 import { ref, h, getCurrentInstance, reactive, watch, onMounted } from "vue";
-import { useRouter } from "vue-router";
 
 import { Menu, emoji } from "./menu";
 import { ElNotification, ElMessage } from "element-plus";
 import { Danmu } from "@/interface/index";
 import { addDanmu } from "@/api/danmu";
+import { addWish } from "@/api/wish";
 import throttle from "@/util/throttle";
-const router = useRouter(); // 路由
 // 获取到 全局事件总线
 const { Bus } = getCurrentInstance()!.appContext.config.globalProperties;
 const screenWidth = ref(window.innerWidth); // 创建响应式引用
@@ -19,8 +18,9 @@ const visible = ref(false);
 const Value = reactive({
   content: "",
   setup: "",
+  model: 0, // 0 默认祝福模式 1 许愿模式
 }) as Danmu;
-
+const placeholder = ref("欢迎写你的生日祝福😉");
 onMounted(() => {
   if (screenWidth.value < 480) {
     popover_width.value = 300;
@@ -31,8 +31,8 @@ onMounted(() => {
 });
 
 watch(
-  () => [window.innerWidth, window.innerHeight],
-  ([newWidth, newHeight]: any) => {
+  () => [window.innerWidth],
+  ([newWidth]: any) => {
     screenWidth.value = newWidth;
     if (screenWidth.value < 480) {
       popover_width.value = 370;
@@ -49,6 +49,26 @@ watch(Value, (newValue: any) => {
     visible.value = false;
   }
 });
+watch(
+  () => Value.model,
+  (newValue: any) => {
+    if (newValue === 1) {
+      // 当 Value.model 的值变为 1 时执行的代码
+      placeholder.value = "现在你可以开始许愿了哦~";
+      ElNotification({
+        title: "许愿模式",
+        message: h("i", { style: "color: teal" }, "现在你可以开始许愿了哦~"),
+      });
+    } else if (newValue === 0) {
+      // 当 Value.model 的值变为 0 时执行的代码
+      placeholder.value = "欢迎写你的生日祝福😉";
+      ElNotification({
+        title: "祝福模式",
+        message: h("i", { style: "color: teal" }, "欢迎写你的生日祝福😉"),
+      });
+    }
+  }
+);
 
 /**
  * 选中提示，然后给输入框复制
@@ -57,23 +77,17 @@ watch(Value, (newValue: any) => {
  * null 表示没有下一个菜单了，选中则直接进入功能，若是文本的话，选中直接赋值到输入框
  */
 const fun = (item: any) => {
+  if (item.name === "许愿") {
+    placeholder.value = "现在你可以开始许愿了哦~";
+    Value.content = "";
+    Value.model = 1; // 许愿模式
+    visible.value = false;
+    return;
+  }
   // 修改样式
   if (item.name === "emoji😀") {
     tanItem.value[0].parentNode.style.display = "flex";
     // tanItem.value[0].parentNode.style.width = "470px";
-  }
-  // 此处插入图片功能
-  if (item.name === "图片") {
-    router.push({ path: "/photo" });
-    return;
-  }
-  // 此处插入视频功能
-  if (item.name === "视频") {
-    ElMessage({
-      message: "视频功能暂未开放哦~",
-      type: "warning",
-    });
-    return;
   }
   // 这部分不修改
   if (item.type === "text") {
@@ -82,6 +96,7 @@ const fun = (item: any) => {
     });
   } else if (item.type === null) {
     Value.content = item.name;
+    Value.model = 0; // 祝福模式
   } else if (item.type === "emojiNull") {
     Value.content += item.name;
   }
@@ -97,27 +112,48 @@ const handleEnter = throttle(() => {
     Value.content = "";
     return;
   }
-  const newValue: Danmu = {
-    content: Value.content,
-    setup: "",
-  };
-  addDanmu(newValue).then((res: any) => {
-    if (res.code === 200) {
-      // 通知
-      ElNotification({
-        title: "发送成功",
-        message: h(
-          "i",
-          { style: "color: teal" },
-          "感谢你的祝福ya~，祝你有美好的一天"
-        ),
-      });
-      Bus.emit("danmu", newValue);
-      visible.value = false;
-      Value.content = "";
-      Value.setup = "";
-    }
-  });
+  if (Value.model == 0) {
+    const newValue = {
+      content: Value.content,
+      setup: "",
+    };
+    addDanmu(newValue).then((res: any) => {
+      if (res.code === 200) {
+        // 通知
+        ElNotification({
+          title: "发送成功",
+          message: h(
+            "i",
+            { style: "color: teal" },
+            "感谢你的祝福ya~，祝你有美好的一天"
+          ),
+        });
+        Bus.emit("danmu", newValue);
+        visible.value = false;
+        Value.content = "";
+        Value.setup = "";
+      }
+    });
+  } else if (Value.model == 1) {
+    const newValue = {
+      content: Value.content,
+    };
+    addWish(newValue).then((res: any) => {
+      if (res.code === 200) {
+        ElNotification({
+          title: "发送成功",
+          message: h(
+            "i",
+            { style: "color: teal" },
+            "感谢你的许愿ya~，祝你有美好的一天"
+          ),
+        });
+        visible.value = false;
+        Value.content = "";
+        Value.setup = "";
+      }
+    });
+  }
 }, debouncetime);
 
 /**
@@ -173,12 +209,17 @@ const handleEmoji = () => {
               ></path>
             </svg>
             <input
-              placeholder="欢迎写你的生日祝福😉"
+              :placeholder="placeholder"
               type="search"
               class="input"
               v-model="Value.content"
               @keyup.enter="handleEnter"
             />
+            <span class="send"
+              ><el-button color="#9e5b9e" size="default" @click="handleEnter"
+                >发送</el-button
+              >
+            </span>
           </div>
           <el-tag class="ml-2" type="warning" style="margin-top: 5px"
             >小tip：输入 '/' 可快捷输入</el-tag

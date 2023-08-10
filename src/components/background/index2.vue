@@ -1,9 +1,7 @@
 <template>
   <div class="box">
     <div ref="vantaRef" style="width: 100%; height: 100vh">
-      <keep-alive>
-        <router-view style="position: relative; z-index: 2"></router-view>
-      </keep-alive>
+      <router-view style="position: relative; z-index: 2"></router-view>
     </div>
   </div>
 </template>
