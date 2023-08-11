@@ -18,7 +18,7 @@ const routes = [
   },
   {
     path: "/photo",
-    component: () => import("@/components/photo/index.vue"),
+    component: () => import("@/components/photo/index2.vue"),
   },
   {
     path: "/wish",
