@@ -1,6 +1,6 @@
 <template>
   <div id="photo-background">
-    <h1 id="title">照片墙</h1>
+    <DrawRight></DrawRight>
     <div
       v-masonry="containerId"
       gutter="10"

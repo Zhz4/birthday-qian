@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-import { ref, inject } from "vue";
+import { ref, inject, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { login } from "@/api/user";
+import { ElMessage } from "element-plus";
 const router = useRouter();
 const menuList = ref([
   {
@@ -25,19 +27,77 @@ const menuList = ref([
   },
 ]);
 const drawOpenOrNot = ref(inject("drawOpenOrNot"));
-
+const centerDialogVisible = ref(false);
+const dialogWidth = ref("30%");
+const screenWidth = ref(window.innerWidth);
+let pathCommon = "";
 const routerRun = (path: string) => {
+  if (path === "/photo") {
+    pathCommon = "/photo";
+    centerDialogVisible.value = true;
+    return;
+  }
+  if (path === "/video") {
+    pathCommon = "/video";
+    centerDialogVisible.value = true;
+    return;
+  }
   router.push(path);
   drawOpenOrNot.value = false;
-  // window.open(path, "_blank");
 };
 const draw_size = ref("350");
+const username = ref("admin");
+const password = ref("");
+const loginHandle = () => {
+  if (username.value === "" || password.value === "") {
+    ElMessage({
+      message: "密码不能为空，请重新输入",
+      type: "error",
+    });
+    return;
+  }
+  login({ username: username.value, password: password.value }).then(
+    (res: any) => {
+      if (res.code === 200) {
+        if (pathCommon === "/photo") {
+          centerDialogVisible.value = false;
+          drawOpenOrNot.value = false;
+          window.open("/photo", "_blank");
+          return;
+        }
+        router.push(pathCommon);
+        centerDialogVisible.value = false;
+        drawOpenOrNot.value = false;
+      }
+    }
+  );
+};
 
-// const drawOpenOrNotFun = () => {
-//   drawOpenOrNot.value = !drawOpenOrNot.value;
-// };
+onMounted(() => {
+  if (screenWidth.value < 480) {
+    dialogWidth.value = "100%";
+  }
+});
 </script>
 <template>
+  <el-dialog
+    v-model="centerDialogVisible"
+    title="提示"
+    :width="dialogWidth"
+    align-center
+  >
+    <el-input v-model="username" placeholder="请输入账号"></el-input>
+    <el-input
+      style="margin-top: 10px"
+      v-model="password"
+      placeholder="请输入密码"
+    ></el-input>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button color="#974f91" @click="loginHandle">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
   <el-drawer
     v-model="drawOpenOrNot"
     :show-close="false"

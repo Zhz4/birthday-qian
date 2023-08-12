@@ -44,10 +44,12 @@ const getWish = () => {
     items.value.forEach((item: any) => {
       item.bgColor = RandomColorGenerator({ format: "HEX" });
     });
+    nextTick(() => {
+      scrollRvealHandle();
+    });
   });
 };
-getWish();
-onMounted(() => {
+const scrollRvealHandle = () => {
   ScrollReveal().reveal(".item", {
     reset: true,
     distance: "40px",
@@ -60,7 +62,9 @@ onMounted(() => {
     },
     scale: 0.6,
   });
-});
+};
+getWish();
+onMounted(() => {});
 </script>
 
 <style>

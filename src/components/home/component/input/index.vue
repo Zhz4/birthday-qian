@@ -222,7 +222,7 @@ const handleEmoji = () => {
             </span>
           </div>
           <el-tag class="ml-2" type="warning" style="margin-top: 5px"
-            >小tip：输入 '/' 可快捷输入</el-tag
+            >小tip：输入 '/' 可快捷输入 & 切换许愿模式</el-tag
           >
         </div>
       </template>
