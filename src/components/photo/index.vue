@@ -2,7 +2,7 @@
   <div id="photo-background">
     <DrawRight></DrawRight>
     <div
-      v-masonry="containerId"
+      v-masonry
       gutter="10"
       transition-duration="0.3s"
       item-selector=".photo-item"
@@ -18,19 +18,6 @@
         <el-image :src="item.path" lazy />
       </div>
     </div>
-    <!-- <WaterFall
-      class="wall"
-      gap="10px"
-      :width="photowidth"
-      :delay="true"
-      :data="items"
-    >
-      <template #default="item">
-        <div class="photo-item">
-          <el-image :src="item.path" lazy />
-        </div>
-      </template>
-    </WaterFall> -->
   </div>
 </template>
 
@@ -40,7 +27,6 @@ import { ref } from "vue";
 // import waterfall from "vue-waterfall2";
 // import { getAllImage } from "@/api/image";
 import imagesLoaded from "imagesloaded";
-const containerId = ref(42);
 const urls = [
   "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2810%29.jpeg",
   "http://rz438zq1h.hn-bkt.clouddn.com/image/default%20%2811%29.jpeg",

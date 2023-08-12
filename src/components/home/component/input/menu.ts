@@ -50,7 +50,8 @@ export const emoji = [
 const obj = {
   生日祝福: Blessing,
   "emoji😀": emoji,
-  许愿: "wish",
+  许愿模式: "wish",
+  祝福模式: "blessingMode",
 };
 
 export const Menu = () => {

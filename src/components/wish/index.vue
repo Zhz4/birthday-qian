@@ -13,8 +13,8 @@
     <h1 id="title">许愿墙</h1>
     <div
       class="item"
-      v-for="item in items"
-      :key="item"
+      v-for="(item, index) in items"
+      :key="index"
       :style="{ backgroundColor: item.bgColor }"
     >
       <span class="content">{{ item.content }}</span>
@@ -44,12 +44,10 @@ const getWish = () => {
     items.value.forEach((item: any) => {
       item.bgColor = RandomColorGenerator({ format: "HEX" });
     });
-    nextTick(() => {
-      scrollRvealHandle();
-    });
   });
 };
-const scrollRvealHandle = () => {
+getWish();
+onMounted(() => {
   ScrollReveal().reveal(".item", {
     reset: true,
     distance: "40px",
@@ -62,9 +60,7 @@ const scrollRvealHandle = () => {
     },
     scale: 0.6,
   });
-};
-getWish();
-onMounted(() => {});
+});
 </script>
 
 <style>

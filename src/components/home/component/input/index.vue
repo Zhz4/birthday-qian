@@ -77,10 +77,17 @@ watch(
  * null 表示没有下一个菜单了，选中则直接进入功能，若是文本的话，选中直接赋值到输入框
  */
 const fun = (item: any) => {
-  if (item.name === "许愿") {
-    placeholder.value = "现在你可以开始许愿了哦~";
+  if (item.name === "许愿模式") {
+    // placeholder.value = "现在你可以开始许愿了哦~";
     Value.content = "";
     Value.model = 1; // 许愿模式
+    visible.value = false;
+    return;
+  }
+  if (item.name === "祝福模式") {
+    // placeholder.value = "现在你可以开始许愿了哦~";
+    Value.content = "";
+    Value.model = 0; // 祝福模式
     visible.value = false;
     return;
   }
