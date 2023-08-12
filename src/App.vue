@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// import App from "@/components/background/index2.vue";
+// import App from "@/components/background/index.vue";
 </script>
 
 <template>

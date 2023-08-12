@@ -1,7 +1,7 @@
 import request from "@/util/request";
 
 /**
- * 获取所有弹幕
+ * 获取所有图片
  * @returns
  */
 export function getAllImage() {

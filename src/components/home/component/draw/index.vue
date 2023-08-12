@@ -62,7 +62,7 @@ const loginHandle = () => {
         if (pathCommon === "/photo") {
           centerDialogVisible.value = false;
           drawOpenOrNot.value = false;
-          window.open("/photo", "_blank");
+          window.open(pathCommon, "_blank");
           return;
         }
         router.push(pathCommon);

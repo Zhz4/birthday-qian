@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, provide, ref } from "vue";
+import {reactive, provide, ref, onMounted} from "vue";
 import DrawRight from "@/components/home/component/draw/index.vue";
 const drawOpenOrNot = ref(false);
 provide("drawOpenOrNot", drawOpenOrNot);
@@ -31,6 +31,13 @@ const options = reactive({
     "pageFullScreen",
     "fullScreen",
   ], //显示所有按钮,
+});
+const screenWidth = ref(window.innerWidth);
+onMounted(() => {
+  if (screenWidth.value < 480) {
+    options.width = "100%";
+    options.height= "40%";//播放器高度
+  }
 });
 </script>
 <template>
