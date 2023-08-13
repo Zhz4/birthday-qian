@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 // import Home from "@/components/home/index.vue";
 import Bg from "@/components/background/index2.vue";
 import Home from "@/components/home/index.vue";
+import hasAdminPermission from "@/router/models/hasAdminPermission";
 // import Photo from "@/components/photo/index.vue";
 // import Wish from "@/components/wish/index.vue";
 const routes = [
@@ -46,7 +47,19 @@ const router = createRouter({
   routes,
 });
 // 导航守卫
-router.beforeEach((to: any, from: any, next: any) => {
-  next();
+router.beforeEach(async (to: any, from: any, next: any) => {
+  const targetPath = to.path; // 获取目标路由地址
+  // 判断目标路由地址是否需要进行拦截
+  if (targetPath === '/photo' ||  targetPath === '/video') {
+    // 进行拦截操作，例如判断用户是否有权限访问该路由
+    const hasPermission = await hasAdminPermission();
+    if (hasPermission) {
+      next(); // 允许访问
+    } else {
+      next('/404'); // 重定向到登录页面或其他指定页面
+    }
+  } else {
+    next(); // 不需要拦截的路由直接放行
+  }
 });
 export default router;

@@ -3,6 +3,10 @@ import { ref, inject, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { login } from "@/api/user";
 import { ElMessage } from "element-plus";
+import { useUserStore } from '@/stores/modules/userStore'
+// 可以在组件中的任意位置访问 `store` 变量 ✨
+const store = useUserStore()
+
 const router = useRouter();
 const menuList = ref([
   {
@@ -30,24 +34,55 @@ const drawOpenOrNot = ref(inject("drawOpenOrNot"));
 const centerDialogVisible = ref(false);
 const dialogWidth = ref("30%");
 const screenWidth = ref(window.innerWidth);
+const draw_size = ref("350");
+const username = ref("");
+const password = ref("");
 let pathCommon = "";
 const routerRun = (path: string) => {
   if (path === "/photo") {
     pathCommon = "/photo";
-    centerDialogVisible.value = true;
-    return;
+    try {
+      const userStoreJson = JSON.parse(localStorage.getItem("userStore"))
+      const usernameU = userStoreJson.token.username;
+      const passwordU = userStoreJson.token.password;
+      if (!usernameU || !passwordU) {
+        centerDialogVisible.value = true;
+        return;
+      }
+      username.value = usernameU;
+      password.value = passwordU;
+      loginHandle()
+      return;
+    }catch (e) {
+      console.log(e)
+      centerDialogVisible.value = true;
+      return;
+    }
   }
   if (path === "/video") {
     pathCommon = "/video";
-    centerDialogVisible.value = true;
-    return;
+    try {
+      const userStoreJson = JSON.parse(localStorage.getItem("userStore"))
+      const usernameU = userStoreJson.token.username;
+      const passwordU = userStoreJson.token.password;
+      if (!usernameU || !passwordU) {
+        centerDialogVisible.value = true;
+        return;
+      }
+      username.value = usernameU;
+      password.value = passwordU;
+      loginHandle()
+      return;
+    }catch (e) {
+      centerDialogVisible.value = true;
+      return;
+    }
   }
   router.push(path);
   drawOpenOrNot.value = false;
 };
-const draw_size = ref("350");
-const username = ref("admin");
-const password = ref("");
+
+
 const loginHandle = () => {
   if (username.value === "" || password.value === "") {
     ElMessage({
@@ -59,6 +94,7 @@ const loginHandle = () => {
   login({ username: username.value, password: password.value }).then(
     (res: any) => {
       if (res.code === 200) {
+        store.token = {username: username.value, password: password.value }
         if (pathCommon === "/photo") {
           centerDialogVisible.value = false;
           drawOpenOrNot.value = false;
@@ -68,6 +104,10 @@ const loginHandle = () => {
         router.push(pathCommon);
         centerDialogVisible.value = false;
         drawOpenOrNot.value = false;
+      }
+      else{
+        localStorage.removeItem("userStore")
+        store.$reset()
       }
     }
   );
