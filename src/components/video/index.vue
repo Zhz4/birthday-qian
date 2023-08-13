@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {reactive, provide, ref, onMounted} from "vue";
 import DrawRight from "@/components/home/component/draw/index.vue";
+import {getTalk} from "@/api/getTallk";
 const drawOpenOrNot = ref(false);
 provide("drawOpenOrNot", drawOpenOrNot);
 const drawOpenOrNotFun = () => {
@@ -33,12 +34,17 @@ const options = reactive({
   ], //显示所有按钮,
 });
 const screenWidth = ref(window.innerWidth);
+const description = ref('加载中..');
+getTalk({id:1}).then((res) => {
+  description.value = res.data.content
+});
 onMounted(() => {
   if (screenWidth.value < 480) {
     options.width = "100%";
     options.height= "40%";//播放器高度
   }
 });
+
 </script>
 <template>
   <div id="video-background">
@@ -53,16 +59,36 @@ onMounted(() => {
       </svg>
     </div>
     <DrawRight></DrawRight>
+
     <div class="videoPlay-box">
       <vue3VideoPlay
         v-bind="options"
         poster="http://rz438zq1h.hn-bkt.clouddn.com/image/R-C.png"
       />
     </div>
+    <el-alert
+        class="tip"
+        title="给宝宝的一些话"
+        type="success"
+        :description="description"
+    />
   </div>
 </template>
 
 <style lang="scss" scoped>
+.tip{
+  width: 65%;
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+@media screen and (max-width: 480px) {
+  .tip{
+    width: 100%;
+    bottom: 120px;
+  }
+}
 #video-background {
   width: 100vw;
   height: 100vh;

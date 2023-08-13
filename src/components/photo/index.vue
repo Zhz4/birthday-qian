@@ -1,6 +1,14 @@
 <template>
   <div id="photo-background">
     <h1 id="title">照片墙</h1>
+<!--    <el-alert class="tip" title="由于图片存放在本地服务器，服务器比较菜，所以加载图片需要等待一段时间...." type="warning"/>-->
+    <el-alert
+        class="tip"
+        title="温馨提示"
+        type="warning"
+        description="由于图片存放在本地服务器，服务器配置比较菜，所以加载图片需要等待一段时间...."
+        show-icon
+    />
     <ul id="grid">
       <li class="item" v-for="(item,index) in data">
 <!--        <img class="img" :src="item" @load="checkImageLoad"/>-->
@@ -70,9 +78,9 @@ onMounted(async () => {
   margin: 0;
   padding: 20px;
 }
-
+$width:90%;
 #grid {
-  width: 90%;
+  width: $width;
   margin: 0 auto;
   .item {
     width: 250px;
@@ -82,6 +90,8 @@ onMounted(async () => {
     font-size: 28px;
     flex: 1 1 0;
     overflow: hidden;
+    margin-bottom: 10px;  /* 自定义的下边距 */
+    background-color: #fff;
     color: #fff;
     //margin:0 auto;
     img {
@@ -93,6 +103,10 @@ onMounted(async () => {
   text-align: center;
   margin: 20px 0;
   color: #FFFFFF;
+}
+.tip{
+  width:  $width;
+  margin: 0 auto 20px;
 }
 @media screen and (max-width: 450px) {
   #grid .item {
