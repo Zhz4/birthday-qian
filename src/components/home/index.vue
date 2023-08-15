@@ -2,6 +2,7 @@
 import VueBaberrage from "./component/vueBaberrage/index.vue";
 import Input from "./component/input/index.vue";
 import DrawRight from "./component/draw/index.vue";
+import Music from "./component/music/index.vue";
 import { ref, provide, onMounted } from "vue";
 const drawOpenOrNot = ref(false);
 provide("drawOpenOrNot", drawOpenOrNot);
@@ -18,6 +19,7 @@ const drawOpenOrNotFun = () => {
   <div class="baberrage">
     <VueBaberrage></VueBaberrage>
   </div>
+  <Music v-show="false"></Music>
   <div class="input">
     <Input></Input>
   </div>
@@ -45,6 +47,7 @@ const drawOpenOrNotFun = () => {
   position: absolute;
   top: 0;
   left: 50%;
+  z-index: 9;
   transform: translateX(-50%);
 }
 .baberrage {

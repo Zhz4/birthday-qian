@@ -10,6 +10,17 @@
       </svg>
     </div>
     <DrawRight></DrawRight>
+    <h1 id="title2">弹幕墙</h1>
+    <div
+        class="item"
+        v-for="(item, index) in items2"
+        :key="index"
+        :style="{ backgroundColor: item.bgColor }"
+    >
+      <span class="content">{{ item.content }}</span>
+      <span class="time">{{ timeFormat(item.time) }}</span>
+      <span class="address">来自-{{ item.address }}</span>
+    </div>
     <h1 id="title">许愿墙</h1>
     <div
         class="item"
@@ -31,6 +42,7 @@ import DrawRight from "@/components/home/component/draw/index.vue";
 import {RandomColorGenerator} from "random-color-creator";
 import {getWishList} from "@/api/wish.ts";
 import timeFormat from "@/util/timeSampTotime.ts";
+import {getDanmuList} from "@/api/danmu";
 
 const drawOpenOrNot = ref(false);
 provide("drawOpenOrNot", drawOpenOrNot);
@@ -38,7 +50,7 @@ const drawOpenOrNotFun = () => {
   drawOpenOrNot.value = !drawOpenOrNot.value;
 };
 const items = ref([]);
-
+const items2 = ref([]);
 async function getWish() {
   try {
     // 获取许愿墙列表
@@ -51,10 +63,25 @@ async function getWish() {
   } catch (error) {
     console.error("Error fetching data:", error);
   }
-
+}
+// 获取弹幕墙列表
+async function getDanmu() {
+  try {
+    getDanmuList().then((res: any) => {
+      items2.value = res.data;
+      items2.value.forEach((item: any) => {
+        item.bgColor = RandomColorGenerator({format: "HEX"});
+      });
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 }
 
+
+
 onMounted(async () => {
+  await getDanmu();
   await getWish();
   ScrollReveal().reveal(".item", {
     reset: true,
@@ -77,7 +104,7 @@ onMounted(async () => {
   min-height: 100vh;
 }
 
-#title {
+#title,#title2 {
   text-align: center;
   font-size: 50px;
   color: #fff;
@@ -87,18 +114,17 @@ onMounted(async () => {
 
 .item {
   width: 80%;
-  margin: 0 auto;
   word-wrap: break-word;
   position: relative;
   border: 3px solid #fff;
-  font-size: 80px;
-  line-height: 72px;
+  line-height: 40px;
   text-align: center;
   border-radius: 15px;
   margin: 10px auto;
   font-size: 20px;
   color: #fff;
-
+  padding: 10px;
+}
 .time {
   position: absolute;
   right: 0;
@@ -118,14 +144,15 @@ onMounted(async () => {
   margin-right: 10px;
 }
 
-}
 @media screen and (max-width: 696px) {
   .item .time {
-    display: none;
+    font-size: 8px;
+    /*display: none;*/
   }
 
   .item .address {
-    display: none;
+    font-size: 8px;
+    /*display: none;*/
   }
 }
 
