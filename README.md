@@ -18,6 +18,19 @@
 前端： vue3 + ts + scss + Element-Plus  
 后端： springboot2  
 服务的：阿里云centos服务器+七牛云对象存储
+## 项目使用
+安装依赖包
+```xshell
+npm install
+```
+进入到 `util/request.ts` 中修改后端接口地址
+```ts
+baseURL: "xxxx", // 地址
+```
+运行项目
+```xShell
+npm run dev
+```
 ## 项目截图
 ### PC 端截图
 <div align="center">
@@ -34,6 +47,10 @@
    <img src="https://cdn.nlark.com/yuque/0/2023/jpeg/26376404/1692088044002-e29e3203-7eae-4335-9343-67f59771c5f3.jpeg"  height=400>
    <img src="https://cdn.nlark.com/yuque/0/2023/jpeg/26376404/1692088051510-46fa838c-e2ae-4887-a91c-2c6a204e7ee6.jpeg"  height=400>
 </div>
+
+### 后端项目地址
+待开源中..
+
 
 ## 使用前端开源库
 - [视频播放器](https://codelife.cc/vue3-video-play/guide/install.html#props)
