@@ -49,7 +49,7 @@ npm run dev
 </div>
 
 ### 后端项目地址
-待开源中..
+[后端地址](https://github.com/Zhz4/birthday-hou)
 
 
 ## 使用前端开源库
